@@ -55,13 +55,13 @@ return [
     | sources which represent each model / table. These sources may then
     | be assigned to any extra authentication guards you have defined.
     |
-    | Supported: "database", "eloquent"
+    | Supported: "database", "eloquent", "otserv"
     |
     */
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'otserv',
             'model' => App\Models\Account::class,
         ],
 
