@@ -108,7 +108,7 @@ class Account extends Authenticatable
      * @param  string  $value
      * @return void
      */
-    public function setFirstNameAttribute($value)
+    public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = sha1($value);
     }
