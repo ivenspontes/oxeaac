@@ -1,5 +1,6 @@
 [![Actions Status](https://github.com/ivenspontes/oxeaac/workflows/Oxeaac/badge.svg)](https://github.com/ivenspontes/oxeaac/actions)
-[![OxeaacDev](https://github.com/ivenspontes/oxeaac/actions/workflows/oxeaac-dev.yml/badge.svg?branch=develop)](https://github.com/ivenspontes/oxeaac/actions/workflows/oxeaac-dev.yml)# oxeaac
+[![OxeaacDev](https://github.com/ivenspontes/oxeaac/actions/workflows/oxeaac-dev.yml/badge.svg?branch=develop)](https://github.com/ivenspontes/oxeaac/actions/workflows/oxeaac-dev.yml)
+# oxeaac
 Oxeaac is an Automatic Account Creator aplication using Laravel Framework
 
 ## composer install
