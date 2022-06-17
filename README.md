@@ -1,3 +1,4 @@
+[![Actions Status](https://github.com/ivenspontes/oxeaac/workflows/CI/badge.svg)](https://github.com/ivenspontes/oxeaac/actions)
 # oxeaac
 Oxeaac is an Automatic Account Creator aplication using Laravel Framework
 
