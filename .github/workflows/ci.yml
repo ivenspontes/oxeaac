@@ -6,6 +6,8 @@ on:
   pull_request:
       branches: [ "master", "develop" ]
 
+  workflow_dispatch:
+
 jobs:
   phpunit:
     runs-on: ubuntu-latest
