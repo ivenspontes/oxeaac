@@ -13,12 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('daily_reward_history', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->smallInteger('daystreak')->default(0);
-            $table->integer('player_id')->index('player_id');
-            $table->integer('timestamp');
-            $table->string('description')->nullable();
+        $check = Schema::hasTable('coins_transactions') ? 'table' : 'create';
+
+        Schema::$check('coins_transactions', function (Blueprint $table) {
+            if (!Schema::hasColumn('coins_transactions', 'id')) {
+                $table->integer('id', true);
+            }
+            if (!Schema::hasColumn('coins_transactions', 'daystreak')) {
+                $table->smallInteger('daystreak')->default(0);
+            }
+            if (!Schema::hasColumn('coins_transactions', 'player_id')) {
+                $table->integer('player_id')->index('player_id');
+            }
+            if (!Schema::hasColumn('coins_transactions', 'timestamp')) {
+                $table->integer('timestamp');
+            }
+            if (!Schema::hasColumn('coins_transactions', 'description')) {
+                $table->string('description')->nullable();
+            }
         });
     }
 

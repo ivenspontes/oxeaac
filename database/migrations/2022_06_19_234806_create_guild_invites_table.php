@@ -13,12 +13,28 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('guild_invites', function (Blueprint $table) {
-            $table->integer('player_id')->default(0);
-            $table->integer('guild_id')->default(0)->index('guild_id');
-            $table->integer('date');
+        $check = Schema::hasTable('guild_invites') ? 'table' : 'create';
 
-            $table->primary(['player_id', 'guild_id']);
+        Schema::$check('guild_invites', function (Blueprint $table) {
+            if (!Schema::hasColumn('guild_invites', 'player_id')) {
+                $table->integer('player_id')->default(0);
+            }
+            if (!Schema::hasColumn('guild_invites', 'guild_id')) {
+                $table->integer('guild_id')->default(0);
+            }
+            if (!Schema::hasColumn('guild_invites', 'date')) {
+                $table->integer('date');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("primary", $indexes)) {
+                $table->primary(['player_id', 'guild_id']);
+            }
+
+            if (!array_key_exists("guild_invites_guild_id_index", $indexes)) {
+                $table->index('guild_id');
+            }
         });
     }
 
