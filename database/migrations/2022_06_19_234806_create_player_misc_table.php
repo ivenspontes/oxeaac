@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_misc', function (Blueprint $table) {
-            $table->integer('player_id');
-            $table->binary('info');
+        $check = Schema::hasTable('player_misc') ? 'table' : 'create';
+
+        Schema::$check('player_misc', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_misc', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_misc', 'info')) {
+                $table->binary('info');
+            }
         });
     }
 

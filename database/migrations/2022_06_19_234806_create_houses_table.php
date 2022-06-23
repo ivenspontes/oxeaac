@@ -13,21 +13,61 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('houses', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->integer('owner')->index('owner');
-            $table->unsignedInteger('paid')->default(0);
-            $table->integer('warnings')->default(0);
-            $table->string('name');
-            $table->integer('rent')->default(0);
-            $table->integer('town_id')->default(0)->index('town_id');
-            $table->integer('bid')->default(0);
-            $table->integer('bid_end')->default(0);
-            $table->integer('last_bid')->default(0);
-            $table->integer('highest_bidder')->default(0);
-            $table->integer('size')->default(0);
-            $table->integer('guildid')->nullable();
-            $table->integer('beds')->default(0);
+        $check = Schema::hasTable('houses') ? 'table' : 'create';
+
+        Schema::$check('houses', function (Blueprint $table) {
+            if (!Schema::hasColumn('houses', 'id')) {
+                $table->integer('id', true);
+            }
+            if (!Schema::hasColumn('houses', 'owner')) {
+                $table->integer('owner');
+            }
+            if (!Schema::hasColumn('houses', 'paid')) {
+                $table->unsignedInteger('paid')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'warnings')) {
+                $table->integer('warnings')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'name')) {
+                $table->string('name');
+            }
+            if (!Schema::hasColumn('houses', 'rent')) {
+                $table->integer('rent')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'town_id')) {
+                $table->integer('town_id')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'bid')) {
+                $table->integer('bid')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'bid_end')) {
+                $table->integer('bid_end')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'last_bid')) {
+                $table->integer('last_bid')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'highest_bidder')) {
+                $table->integer('highest_bidder')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'size')) {
+                $table->integer('size')->default(0);
+            }
+            if (!Schema::hasColumn('houses', 'guildid')) {
+                $table->integer('guildid')->nullable();
+            }
+            if (!Schema::hasColumn('houses', 'beds')) {
+                $table->integer('beds')->default(0);
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("owner", $indexes)) {
+                $table->index('owner', 'owner');
+            }
+
+            if (!array_key_exists("town_id", $indexes)) {
+                $table->index('town_id', 'town_id');
+            }
         });
     }
 

@@ -13,10 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_stash', function (Blueprint $table) {
-            $table->integer('player_id');
-            $table->integer('item_id');
-            $table->integer('item_count');
+        $check = Schema::hasTable('player_stash') ? 'table' : 'create';
+
+        Schema::$check('player_stash', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_stash', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_stash', 'item_id')) {
+                $table->integer('item_id');
+            }
+            if (!Schema::hasColumn('player_stash', 'item_count')) {
+                $table->integer('item_count');
+            }
         });
     }
 

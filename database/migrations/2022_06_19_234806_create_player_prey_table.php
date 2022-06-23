@@ -13,18 +13,42 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_prey', function (Blueprint $table) {
-            $table->integer('player_id');
-            $table->boolean('slot');
-            $table->boolean('state');
-            $table->string('raceid', 250);
-            $table->boolean('option');
-            $table->boolean('bonus_type');
-            $table->boolean('bonus_rarity');
-            $table->string('bonus_percentage', 250);
-            $table->string('bonus_time', 250);
-            $table->bigInteger('free_reroll');
-            $table->binary('monster_list')->nullable();
+        $check = Schema::hasTable('player_prey') ? 'table' : 'create';
+
+        Schema::$check('player_prey', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_prey', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_prey', 'slot')) {
+                $table->boolean('slot');
+            }
+            if (!Schema::hasColumn('player_prey', 'state')) {
+                $table->boolean('state');
+            }
+            if (!Schema::hasColumn('player_prey', 'raceid')) {
+                $table->string('raceid', 250);
+            }
+            if (!Schema::hasColumn('player_prey', 'option')) {
+                $table->boolean('option');
+            }
+            if (!Schema::hasColumn('player_prey', 'bonus_type')) {
+                $table->boolean('bonus_type');
+            }
+            if (!Schema::hasColumn('player_prey', 'bonus_rarity')) {
+                $table->boolean('bonus_rarity');
+            }
+            if (!Schema::hasColumn('player_prey', 'bonus_percentage')) {
+                $table->string('bonus_percentage', 250);
+            }
+            if (!Schema::hasColumn('player_prey', 'bonus_time')) {
+                $table->string('bonus_time', 250);
+            }
+            if (!Schema::hasColumn('player_prey', 'free_reroll')) {
+                $table->bigInteger('free_reroll');
+            }
+            if (!Schema::hasColumn('player_prey', 'monster_list')) {
+                $table->binary('monster_list')->nullable();
+            }
         });
     }
 

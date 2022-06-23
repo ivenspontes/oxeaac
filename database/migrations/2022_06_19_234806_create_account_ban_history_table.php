@@ -13,7 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-
         $check = Schema::hasTable('account_ban_history') ? 'table' : 'create';
 
         Schema::$check('account_ban_history', function (Blueprint $table) {
@@ -21,7 +20,7 @@ return new class extends Migration
                 $table->integer('id', true);
             }
             if (!Schema::hasColumn('account_ban_history', 'account_id')) {
-                $table->unsignedInteger('account_id')->index('account_id');
+                $table->unsignedInteger('account_id');
             }
             if (!Schema::hasColumn('account_ban_history', 'reason')) {
                 $table->string('reason');
@@ -33,7 +32,17 @@ return new class extends Migration
                 $table->bigInteger('expired_at');
             }
             if (!Schema::hasColumn('account_ban_history', 'banned_by')) {
-                $table->integer('banned_by')->index('banned_by');
+                $table->integer('banned_by');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("account_id", $indexes)) {
+                $table->index('account_id', 'account_id');
+            }
+
+            if (!array_key_exists("banned_by", $indexes)) {
+                $table->index('banned_by', 'banned_by');
             }
         });
     }

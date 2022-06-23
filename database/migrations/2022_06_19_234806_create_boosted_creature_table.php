@@ -38,13 +38,19 @@ return new class extends Migration
                 $table->integer('lookmount')->nullable()->default(0);
             }
             if (!Schema::hasColumn('boosted_creature', 'date')) {
-                $table->string('date', 250)->default('')->primary();
+                $table->string('date', 250)->default('');
             }
             if (!Schema::hasColumn('boosted_creature', 'boostname')) {
                 $table->text('boostname')->nullable();
             }
             if (!Schema::hasColumn('boosted_creature', 'raceid')) {
                 $table->string('raceid', 250)->default('');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("primary", $indexes)) {
+                $table->primary('date');
             }
         });
     }

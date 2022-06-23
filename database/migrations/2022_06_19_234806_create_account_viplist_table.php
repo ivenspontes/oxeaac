@@ -17,10 +17,10 @@ return new class extends Migration
 
         Schema::$check('account_viplist', function (Blueprint $table) {
             if (!Schema::hasColumn('account_viplist', 'account_id')) {
-                $table->unsignedInteger('account_id')->index('account_id')->comment('id of account whose viplist entry it is');
+                $table->unsignedInteger('account_id')->comment('id of account whose viplist entry it is');
             }
             if (!Schema::hasColumn('account_viplist', 'player_id')) {
-                $table->integer('player_id')->index('player_id')->comment('id of target player of viplist entry');
+                $table->integer('player_id')->comment('id of target player of viplist entry');
             }
             if (!Schema::hasColumn('account_viplist', 'description')) {
                 $table->string('description', 128)->default('');
@@ -36,6 +36,14 @@ return new class extends Migration
 
             if (!array_key_exists("account_viplist_unique", $indexes)) {
                 $table->unique(['account_id', 'player_id'], 'account_viplist_unique');
+            }
+
+            if (!array_key_exists("account_id", $indexes)) {
+                $table->index('account_id', 'account_id');
+            }
+
+            if (!array_key_exists("player_id", $indexes)) {
+                $table->index('player_id', 'player_id');
             }
         });
     }

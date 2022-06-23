@@ -13,9 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_spells', function (Blueprint $table) {
-            $table->integer('player_id')->index('player_id');
-            $table->string('name');
+        $check = Schema::hasTable('player_spells') ? 'table' : 'create';
+
+        Schema::$check('player_spells', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_spells', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_spells', 'name')) {
+                $table->string('name');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("player_id", $indexes)) {
+                $table->index('player_id', 'player_id');
+            }
         });
     }
 

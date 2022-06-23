@@ -13,10 +13,24 @@ class CreatePasswordResetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+        $check = Schema::hasTable('password_resets') ? 'table' : 'create';
+
+        Schema::$check('password_resets', function (Blueprint $table) {
+            if (!Schema::hasColumn('password_resets', 'email')) {
+                $table->string('email');
+            }
+            if (!Schema::hasColumn('password_resets', 'token')) {
+                $table->string('token');
+            }
+            if (!Schema::hasColumn('password_resets', 'created_at')) {
+                $table->timestamp('created_at')->nullable();
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("password_resets_email_index", $indexes)) {
+                $table->index('email');
+            }
         });
     }
 

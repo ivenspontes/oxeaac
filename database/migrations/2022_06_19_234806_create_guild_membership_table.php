@@ -17,16 +17,30 @@ return new class extends Migration
 
         Schema::$check('guild_membership', function (Blueprint $table) {
             if (!Schema::hasColumn('guild_membership', 'player_id')) {
-                $table->integer('player_id')->primary();
+                $table->integer('player_id');
             }
             if (!Schema::hasColumn('guild_membership', 'guild_id')) {
-                $table->integer('guild_id')->index('guild_id');
+                $table->integer('guild_id');
             }
             if (!Schema::hasColumn('guild_membership', 'rank_id')) {
-                $table->integer('rank_id')->index('rank_id');
+                $table->integer('rank_id');
             }
             if (!Schema::hasColumn('guild_membership', 'nick')) {
                 $table->string('nick', 15)->default('');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("guild_id", $indexes)) {
+                $table->index('guild_id', 'guild_id');
+            }
+
+            if (!array_key_exists("rank_id", $indexes)) {
+                $table->index('rank_id', 'rank_id');
+            }
+
+            if (!array_key_exists("primary", $indexes)) {
+                $table->primary('player_id');
             }
         });
     }

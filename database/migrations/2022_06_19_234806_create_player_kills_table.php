@@ -13,11 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_kills', function (Blueprint $table) {
-            $table->integer('player_id');
-            $table->unsignedBigInteger('time')->default(0);
-            $table->integer('target');
-            $table->boolean('unavenged')->default(false);
+        $check = Schema::hasTable('player_kills') ? 'table' : 'create';
+
+        Schema::$check('player_kills', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_kills', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_kills', 'time')) {
+                $table->unsignedBigInteger('time')->default(0);
+            }
+            if (!Schema::hasColumn('player_kills', 'target')) {
+                $table->integer('target');
+            }
+            if (!Schema::hasColumn('player_kills', 'unavenged')) {
+                $table->boolean('unavenged')->default(false);
+            }
         });
     }
 

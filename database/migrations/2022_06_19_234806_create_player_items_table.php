@@ -13,13 +13,37 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_items', function (Blueprint $table) {
-            $table->integer('player_id')->default(0)->index('player_id');
-            $table->integer('pid')->default(0);
-            $table->integer('sid')->default(0)->index('sid');
-            $table->integer('itemtype')->default(0);
-            $table->integer('count')->default(0);
-            $table->binary('attributes');
+        $check = Schema::hasTable('player_items') ? 'table' : 'create';
+
+        Schema::$check('player_items', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_items', 'player_id')) {
+                $table->integer('player_id')->default(0);
+            }
+            if (!Schema::hasColumn('player_items', 'pid')) {
+                $table->integer('pid')->default(0);
+            }
+            if (!Schema::hasColumn('player_items', 'sid')) {
+                $table->integer('sid')->default(0);
+            }
+            if (!Schema::hasColumn('player_items', 'itemtype')) {
+                $table->integer('itemtype')->default(0);
+            }
+            if (!Schema::hasColumn('player_items', 'count')) {
+                $table->integer('count')->default(0);
+            }
+            if (!Schema::hasColumn('player_items', 'attributes')) {
+                $table->binary('attributes');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("sid", $indexes)) {
+                $table->index('sid', 'sid');
+            }
+
+            if (!array_key_exists("player_id", $indexes)) {
+                $table->index('player_id', 'player_id');
+            }
         });
     }
 

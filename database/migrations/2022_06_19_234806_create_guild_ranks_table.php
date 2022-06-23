@@ -13,11 +13,27 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('guild_ranks', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->integer('guild_id')->index('guild_id')->comment('guild');
-            $table->string('name')->comment('rank name');
-            $table->integer('level')->comment('rank level - leader, vice, member, maybe something else');
+        $check = Schema::hasTable('guild_ranks') ? 'table' : 'create';
+
+        Schema::$check('guild_ranks', function (Blueprint $table) {
+            if (!Schema::hasColumn('guild_ranks', 'id')) {
+                $table->integer('id', true);
+            }
+            if (!Schema::hasColumn('guild_ranks', 'guild_id')) {
+                $table->integer('guild_id')->comment('guild');
+            }
+            if (!Schema::hasColumn('guild_ranks', 'name')) {
+                $table->string('name')->comment('rank name');
+            }
+            if (!Schema::hasColumn('guild_ranks', 'level')) {
+                $table->integer('level')->comment('rank level - leader, vice, member, maybe something else');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("guild_id", $indexes)) {
+                $table->index('guild_id', 'guild_id');
+            }
         });
     }
 

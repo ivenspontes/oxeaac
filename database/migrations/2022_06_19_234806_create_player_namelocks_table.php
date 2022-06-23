@@ -13,11 +13,31 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_namelocks', function (Blueprint $table) {
-            $table->integer('player_id')->unique('player_namelocks_unique');
-            $table->string('reason');
-            $table->bigInteger('namelocked_at');
-            $table->integer('namelocked_by')->index('namelocked_by');
+        $check = Schema::hasTable('player_namelocks') ? 'table' : 'create';
+
+        Schema::$check('player_namelocks', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_namelocks', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_namelocks', 'reason')) {
+                $table->string('reason');
+            }
+            if (!Schema::hasColumn('player_namelocks', 'namelocked_at')) {
+                $table->bigInteger('namelocked_at');
+            }
+            if (!Schema::hasColumn('player_namelocks', 'namelocked_by')) {
+                $table->integer('namelocked_by');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("player_namelocks_unique", $indexes)) {
+                $table->unique('player_id', 'player_namelocks_unique');
+            }
+
+            if (!array_key_exists("namelocked_by", $indexes)) {
+                $table->index('namelocked_by', 'namelocked_by');
+            }
         });
     }
 

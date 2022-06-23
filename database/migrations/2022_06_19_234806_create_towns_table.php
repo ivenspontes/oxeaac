@@ -13,12 +13,30 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('towns', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->string('name')->unique('name');
-            $table->integer('posx')->default(0);
-            $table->integer('posy')->default(0);
-            $table->integer('posz')->default(0);
+        $check = Schema::hasTable('towns') ? 'table' : 'create';
+
+        Schema::$check('towns', function (Blueprint $table) {
+            if (!Schema::hasColumn('towns', 'id')) {
+                $table->integer('id', true);
+            }
+            if (!Schema::hasColumn('towns', 'name')) {
+                $table->string('name');
+            }
+            if (!Schema::hasColumn('towns', 'posx')) {
+                $table->integer('posx')->default(0);
+            }
+            if (!Schema::hasColumn('towns', 'posy')) {
+                $table->integer('posy')->default(0);
+            }
+            if (!Schema::hasColumn('towns', 'posz')) {
+                $table->integer('posz')->default(0);
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("name", $indexes)) {
+                $table->unique('name', 'name');
+            }
         });
     }
 

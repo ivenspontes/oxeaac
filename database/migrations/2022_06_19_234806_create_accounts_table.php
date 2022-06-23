@@ -20,7 +20,7 @@ return new class extends Migration
                 $table->increments('id');
             }
             if (!Schema::hasColumn('accounts', 'name')) {
-                $table->string('name', 32)->unique('accounts_unique');
+                $table->string('name', 32);
             }
             if (!Schema::hasColumn('accounts', 'password')) {
                 $table->char('password', 40);
@@ -45,6 +45,12 @@ return new class extends Migration
             }
             if (!Schema::hasColumn('accounts', 'recruiter')) {
                 $table->integer('recruiter')->nullable()->default(0);
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("accounts_unique", $indexes)) {
+                $table->unique('name', 'accounts_unique');
             }
         });
     }

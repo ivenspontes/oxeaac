@@ -13,23 +13,29 @@ return new class extends Migration
      */
     public function up()
     {
-        $check = Schema::hasTable('coins_transactions') ? 'table' : 'create';
+        $check = Schema::hasTable('daily_reward_history') ? 'table' : 'create';
 
-        Schema::$check('coins_transactions', function (Blueprint $table) {
-            if (!Schema::hasColumn('coins_transactions', 'id')) {
+        Schema::$check('daily_reward_history', function (Blueprint $table) {
+            if (!Schema::hasColumn('daily_reward_history', 'id')) {
                 $table->integer('id', true);
             }
-            if (!Schema::hasColumn('coins_transactions', 'daystreak')) {
+            if (!Schema::hasColumn('daily_reward_history', 'daystreak')) {
                 $table->smallInteger('daystreak')->default(0);
             }
-            if (!Schema::hasColumn('coins_transactions', 'player_id')) {
-                $table->integer('player_id')->index('player_id');
+            if (!Schema::hasColumn('daily_reward_history', 'player_id')) {
+                $table->integer('player_id');
             }
-            if (!Schema::hasColumn('coins_transactions', 'timestamp')) {
+            if (!Schema::hasColumn('daily_reward_history', 'timestamp')) {
                 $table->integer('timestamp');
             }
-            if (!Schema::hasColumn('coins_transactions', 'description')) {
+            if (!Schema::hasColumn('daily_reward_history', 'description')) {
                 $table->string('description')->nullable();
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("player_id", $indexes)) {
+                $table->index('player_id', 'player_id');
             }
         });
     }

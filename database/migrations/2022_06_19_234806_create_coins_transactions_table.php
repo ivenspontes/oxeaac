@@ -34,6 +34,14 @@ return new class extends Migration
             if (!Schema::hasColumn('coins_transactions', 'timestamp')) {
                 $table->timestamp('timestamp')->nullable()->useCurrent();
             }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("coins_transactions_account_id_index", $indexes)) {
+                $table->index('account_id');
+            }
+
+
         });
     }
 

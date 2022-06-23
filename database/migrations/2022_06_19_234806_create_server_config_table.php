@@ -13,9 +13,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('server_config', function (Blueprint $table) {
-            $table->string('config', 50)->primary();
-            $table->string('value', 256)->default('');
+        $check = Schema::hasTable('server_config') ? 'table' : 'create';
+
+        Schema::$check('server_config', function (Blueprint $table) {
+            if (!Schema::hasColumn('server_config', 'config')) {
+                $table->string('config', 50);
+            }
+            if (!Schema::hasColumn('server_config', 'value')) {
+                $table->string('value', 256)->default('');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("primary", $indexes)) {
+                $table->primary('config');
+            }
+
         });
     }
 

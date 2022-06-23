@@ -17,7 +17,7 @@ return new class extends Migration
 
         Schema::$check('account_bans', function (Blueprint $table) {
             if (!Schema::hasColumn('account_bans', 'account_id')) {
-                $table->unsignedInteger('account_id')->primary();
+                $table->unsignedInteger('account_id');
             }
             if (!Schema::hasColumn('account_bans', 'reason')) {
                 $table->string('reason');
@@ -29,7 +29,17 @@ return new class extends Migration
                 $table->bigInteger('expires_at');
             }
             if (!Schema::hasColumn('account_bans', 'banned_by')) {
-                $table->integer('banned_by')->index('banned_by');
+                $table->integer('banned_by');
+            }
+
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes($table->getTable());
+
+            if (!array_key_exists("banned_by", $indexes)) {
+                $table->index('banned_by', 'banned_by');
+            }
+
+            if (!array_key_exists("primary", $indexes)) {
+                $table->primary('account_id');
             }
         });
     }

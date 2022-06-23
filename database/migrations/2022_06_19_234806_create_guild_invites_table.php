@@ -32,8 +32,8 @@ return new class extends Migration
                 $table->primary(['player_id', 'guild_id']);
             }
 
-            if (!array_key_exists("guild_invites_guild_id_index", $indexes)) {
-                $table->index('guild_id');
+            if (!array_key_exists("guild_id", $indexes)) {
+                $table->index('guild_id', 'guild_id');
             }
         });
     }

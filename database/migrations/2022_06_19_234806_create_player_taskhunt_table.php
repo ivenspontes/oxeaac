@@ -13,17 +13,39 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('player_taskhunt', function (Blueprint $table) {
-            $table->integer('player_id');
-            $table->boolean('slot');
-            $table->boolean('state');
-            $table->string('raceid', 250);
-            $table->boolean('upgrade');
-            $table->boolean('rarity');
-            $table->string('kills', 250);
-            $table->bigInteger('disabled_time');
-            $table->bigInteger('free_reroll');
-            $table->binary('monster_list')->nullable();
+        $check = Schema::hasTable('player_taskhunt') ? 'table' : 'create';
+
+        Schema::$check('player_taskhunt', function (Blueprint $table) {
+            if (!Schema::hasColumn('player_taskhunt', 'player_id')) {
+                $table->integer('player_id');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'slot')) {
+                $table->boolean('slot');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'state')) {
+                $table->boolean('state');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'raceid')) {
+                $table->string('raceid', 250);
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'upgrade')) {
+                $table->boolean('upgrade');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'rarity')) {
+                $table->boolean('rarity');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'kills')) {
+                $table->string('kills', 250);
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'disabled_time')) {
+                $table->bigInteger('disabled_time');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'free_reroll')) {
+                $table->bigInteger('free_reroll');
+            }
+            if (!Schema::hasColumn('player_taskhunt', 'monster_list')) {
+                $table->binary('monster_list')->nullable();
+            }
         });
     }
 
