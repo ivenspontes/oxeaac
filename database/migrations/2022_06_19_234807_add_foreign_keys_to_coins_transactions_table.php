@@ -14,7 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('coins_transactions', function (Blueprint $table) {
-            $table->foreign(['account_id'], 'coins_transactions_account_fk')->references(['id'])->on('accounts')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            $Fks = array_map(function($key) {
+                return $key->getName();
+            }, Schema::getConnection()->getDoctrineSchemaManager()->listTableForeignKeys($table->getTable()));
+            
+            if (!in_array("coins_transactions_account_fk", $Fks)) {
+                $table->foreign(['account_id'], 'coins_transactions_account_fk')->references(['id'])->on('accounts')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            }
         });
     }
 

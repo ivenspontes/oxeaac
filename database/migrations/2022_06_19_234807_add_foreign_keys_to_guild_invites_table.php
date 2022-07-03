@@ -14,8 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::table('guild_invites', function (Blueprint $table) {
-            $table->foreign(['guild_id'], 'guild_invites_guild_fk')->references(['id'])->on('guilds')->onUpdate('NO ACTION')->onDelete('CASCADE');
-            $table->foreign(['player_id'], 'guild_invites_player_fk')->references(['id'])->on('players')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            $Fks = array_map(function($key) {
+                return $key->getName();
+            }, Schema::getConnection()->getDoctrineSchemaManager()->listTableForeignKeys($table->getTable()));
+            
+            if (!in_array("account_viplist_account_fk", $Fks)) {
+                $table->foreign(['guild_id'], 'guild_invites_guild_fk')->references(['id'])->on('guilds')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            }
+            if (!in_array("account_viplist_player_fk", $Fks)) {
+                $table->foreign(['player_id'], 'guild_invites_player_fk')->references(['id'])->on('players')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            }
         });
     }
 

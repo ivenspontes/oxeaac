@@ -14,7 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::table('daily_reward_history', function (Blueprint $table) {
-            $table->foreign(['player_id'], 'daily_reward_history_player_fk')->references(['id'])->on('players')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            $Fks = array_map(function($key) {
+                return $key->getName();
+            }, Schema::getConnection()->getDoctrineSchemaManager()->listTableForeignKeys($table->getTable()));
+            
+            if (!in_array("daily_reward_history_player_fk", $Fks)) {
+                $table->foreign(['player_id'], 'daily_reward_history_player_fk')->references(['id'])->on('players')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            }
         });
     }
 
